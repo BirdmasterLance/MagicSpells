@@ -2,13 +2,15 @@ package com.nisovin.magicspells.spelleffects;
 
 import de.slikey.effectlib.EffectLib;
 import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.util.DynamicLocation;
 import de.slikey.effectlib.util.ParticleEffect;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 
-class RedDust
-  extends SpellEffect {
+class Colordust
+  extends SpellEffect
+{
   int red = 0;
   int green = 0;
   int blue = 0;
@@ -82,7 +84,7 @@ class RedDust
     effect.particle = ParticleEffect.REDSTONE;
     effect.color = Color.fromBGR(this.blue, this.green, this.red);
     effect.iterations = 1;
-    effect.setLocation(location);
+    effect.setDynamicOrigin(new DynamicLocation(location));
     effect.particles = this.count;
     effect.xradius = this.xSpread;
     effect.yradius = this.ySpread;
