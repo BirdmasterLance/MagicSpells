@@ -10,7 +10,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.util.Vector;
+
 import com.nisovin.magicspells.MagicSpells;
+import com.nisovin.magicspells.events.SpellApplyDamageEvent;
 import com.nisovin.magicspells.mana.ManaChangeReason;
 import com.nisovin.magicspells.spelleffects.EffectPosition;
 import com.nisovin.magicspells.spells.SpellDamageSpell;
@@ -33,7 +35,6 @@ public class DrainlifeSpell extends TargetedSpell implements TargetedEntitySpell
 	private boolean instant;
 	private boolean ignoreArmor;
 	private boolean checkPlugins;
-	private String particle;
 	
 	public DrainlifeSpell(MagicConfig config, String spellName) {
 		super(config, spellName);
@@ -48,7 +49,6 @@ public class DrainlifeSpell extends TargetedSpell implements TargetedEntitySpell
 		instant = getConfigBoolean("instant", true);
 		ignoreArmor = getConfigBoolean("ignore-armor", false);
 		checkPlugins = getConfigBoolean("check-plugins", true);
-		particle = getConfigString("particle", "smoke");
 	}
 	
 	@Override
@@ -91,6 +91,7 @@ public class DrainlifeSpell extends TargetedSpell implements TargetedEntitySpell
 				take = event.getDamage();
 				player.setLastDamageCause(event);
 			}
+			Bukkit.getPluginManager().callEvent(new SpellApplyDamageEvent(this, player, target, take, DamageCause.MAGIC));
 			if (ignoreArmor) {
 				double health = target.getHealth();
 				if (health > target.getMaxHealth()) health = target.getMaxHealth();
