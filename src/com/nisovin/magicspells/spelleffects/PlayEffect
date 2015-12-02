@@ -1,0 +1,117 @@
+package com.nisovin.magicspells.spelleffects;
+
+import java.lang.ref.WeakReference;
+
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.util.Vector;
+
+import de.slikey.effectlib.Effect;
+import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.EffectType;
+import de.slikey.effectlib.util.ParticleEffect;
+import de.slikey.effectlib.util.RandomUtils;
+
+public class PlayEffect extends Effect{
+
+	public ParticleEffect particle = ParticleEffect.REDSTONE;
+	public double xradius = 1;
+	public double yradius = 1;
+	public int particles = 10;
+	public float yOffset = 0;
+	
+	private Location location = null;
+	private WeakReference<Entity> entity = new WeakReference<Entity>(null);
+	private Location target = null;
+	private WeakReference<Entity> targetEntity = new WeakReference<Entity>(null);
+	private Vector locationEntityOffset = null;
+	private Vector targetEntityOffset = null;
+	
+	public PlayEffect(EffectManager effectManager) {
+	        super(effectManager);
+	        type = EffectType.REPEATING;
+	        period = 1;
+	        iterations = 600;
+	    }
+
+	    @Override
+	    public void onRun() {
+	        Location location = getLocation();
+	        location.add(0, yOffset, 0);
+	        for (int i = 0; i < particles; i++) {
+	            Vector v = RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * xradius);
+	            v.setY(RandomUtils.random.nextFloat() * yradius);
+	            location.add(v);
+	            display(particle, location);
+	            location.subtract(v);
+	        }
+	    }
+
+/**	     protected void updateLocation() {
+	        Entity entityReference = entity.get();
+	        if (entityReference != null) {
+	            Location currentLocation = null;
+	            if (entityReference instanceof LivingEntity) {
+	                currentLocation = ((LivingEntity)entityReference).getEyeLocation();
+	            } else {
+	                currentLocation = entityReference.getLocation();
+	            }
+	            if (locationEntityOffset != null) {
+	                currentLocation.add(locationEntityOffset);
+	            } else if (location != null) {
+	                locationEntityOffset = location.toVector().subtract(currentLocation.toVector());
+	                currentLocation = location;
+	            }
+	
+	            setLocation(currentLocation);
+	     }
+	     }
+	    
+		public void setLocation(Location location) {
+	         if (location == null) {
+	        	throw new IllegalArgumentException("Location cannot be null!");
+	         }
+	         this.location = location == null ? null : location.clone();
+	         	if (offset != null && this.location != null) {
+	            this.location = this.location.add(offset);
+			
+	         	}
+		}
+		
+	     protected void updateTarget() {
+	        Entity entityReference = targetEntity.get();
+	        if (entityReference != null) {
+	            Location currentLocation = null;
+	            if (entityReference instanceof LivingEntity) {
+	                currentLocation = ((LivingEntity)entityReference).getEyeLocation();
+	            } else {
+	                currentLocation = entityReference.getLocation();
+	            }
+	            if (targetEntityOffset != null) {
+	                currentLocation.add(targetEntityOffset);
+	            } else if (target != null) {
+	                targetEntityOffset = target.toVector().subtract(currentLocation.toVector());
+	                currentLocation = target;
+	            }
+	
+	            setTarget(currentLocation);
+	    	 
+
+	}
+	     }
+	     
+	     public void setEntity(Entity entity) {
+	    	         this.entity = new WeakReference<Entity>(entity);
+	    	      }
+	     public void setTargetEntity(Entity entity) {
+	    	 this.targetEntity = new WeakReference<Entity>(entity);
+	     }
+	     
+	     public void setTarget(Location location) {
+	    	 this.target = location == null ? null : location.clone();
+	    	 if (targetOffset != null && this.target != null) {
+	    	 this.target = this.target.add(targetOffset);
+	    	 }
+	     } **/
+}
