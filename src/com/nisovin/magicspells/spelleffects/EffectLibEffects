@@ -1,0 +1,276 @@
+package com.nisovin.magicspells.spelleffects;
+
+import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
+import de.slikey.effectlib.EffectLib;
+import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.effect.ConeEffect;
+import de.slikey.effectlib.effect.DiscoBallEffect;
+import de.slikey.effectlib.effect.DragonEffect;
+import de.slikey.effectlib.effect.FountainEffect;
+import de.slikey.effectlib.effect.GridEffect;
+import de.slikey.effectlib.effect.HelixEffect;
+import de.slikey.effectlib.effect.ImageEffect;
+import de.slikey.effectlib.effect.ShieldEffect;
+import de.slikey.effectlib.effect.SphereEffect;
+import de.slikey.effectlib.effect.TextEffect;
+import de.slikey.effectlib.effect.TornadoEffect;
+import de.slikey.effectlib.effect.VortexEffect;
+import de.slikey.effectlib.effect.WarpEffect;
+import de.slikey.effectlib.util.ParticleEffect;
+
+class EffectLibEffects extends SpellEffect {
+	
+	//Basics and effects that don't need their own catergory
+	int red = 0;
+	int green = 0;
+	int blue = 0;
+	float speed = 0F;
+	float yOffset = 0F;
+	int count = 5;
+	int iterations = 1;
+	int visibleRange = 32;
+	int count2 = 5;
+	boolean sphere = true;
+	String effectClass = "DragonEffect";
+	String particle =  "FLAME";
+	String text = "Magic Spells";
+	String image = "magicspells";
+	
+	//WarpEffect specialties
+	int rings = 12; //Number of Circles
+	float warpgrow = 0.2F; //Growth of circles?
+	
+	//DragonEffect specialties
+	int arcs = 20; //??
+	int stepsPerIteration = 2; 
+	float pitch = 0.1F;
+	float length = 4; //Length in Blocks
+	
+	//ConeEffect specialties
+	float rgrow = 0.006F; //Growth of circles
+	float conegrow = 0.05F;
+	
+	//HelixEffectspecialties
+	float radius = 10;
+	int strands = 8;
+	float curve = 10;
+	
+	//DiscoBallEffect
+	String lineparticle =  "REDDUST";
+	int linered = 0;
+	int linegreen = 0;
+	int lineblue = 0;
+	int spherered = 0;
+	int spheregreen = 0;
+	int sphereblue = 0; 
+	
+	//FountainEffect
+	float fountainradius = 0.1F;
+	float height = 3;
+	float spoutheight = 7;
+	int spoutparticles = 7;
+	int strandparticles = 7;
+
+
+	@Override
+	public void loadFromString(String string) {
+		if (string != null && !string.isEmpty()) {
+			String[] data = string.split(" ");
+			
+			if (data.length >= 3) {
+				speed = Float.parseFloat(data[2]);
+			}
+			if (data.length >= 4) {
+				count = Integer.parseInt(data[3]);
+			}
+		}
+	}
+
+	@Override
+	protected void loadFromConfig(ConfigurationSection config) {
+	
+		// Effects that apply to all
+		effectClass = config.getString("effect-class", effectClass);
+	    iterations = (int)config.getInt("iterations", iterations);
+		red = config.getInt("red", red);
+		green = config.getInt("green", green);
+		blue = config.getInt("blue", blue);
+		speed = (float)config.getDouble("speed", speed);
+		visibleRange = config.getInt("render-distance", visibleRange);
+		count = config.getInt("count", count);		
+		particle = config.getString("particle", particle);
+		yOffset = (float)config.getDouble("y-offset", yOffset);
+		text = config.getString("text", text);
+		
+		//For WarpEffect
+		rings = (int)config.getInt("rings", rings);
+		warpgrow = (float)config.getDouble("grow", warpgrow); 
+		radius = (float)config.getDouble("radius", radius);
+		
+		//For DragonEffect
+		arcs = (int)config.getInt("arcs", arcs);
+		pitch = (float)config.getDouble("pitch", pitch);
+		stepsPerIteration = (int)config.getDouble("steps", stepsPerIteration);
+		length = (float)config.getDouble("length", length);
+		
+		//For ConeEffect
+		rgrow = (float)config.getDouble("radius-grow", rgrow);
+		conegrow = (float)config.getDouble("grow", conegrow); 
+		radius = (float)config.getDouble("radius", radius);
+		
+		//For Helix Effect
+		radius = (float)config.getDouble("radius", radius);
+		strands = (int)config.getInt("strands", strands);
+		curve = (float)config.getDouble("curve", curve);
+		
+		//For DiscoBallEffect
+		particle = config.getString("sphere-particle", particle);
+		lineparticle = config.getString("line-particle", lineparticle);
+		linered = config.getInt("line-red", linered);
+		linegreen = config.getInt("line-green", linegreen);
+		lineblue = config.getInt("line-blue", lineblue);
+		spherered = config.getInt("sphere-red", spherered);
+		spheregreen = config.getInt("sphere-green", spheregreen);
+		sphereblue = config.getInt("sphere-blue", sphereblue);
+		count = config.getInt("sphere-count", count);
+		count2 = config.getInt("line-count", count2);
+		
+		//For FountainEffect
+		fountainradius = (float)config.getDouble("strand-radius", fountainradius);
+		spoutheight = (float)config.getDouble("spout-height", spoutheight);
+		height = (float)config.getDouble("strand-height", height);
+		spoutparticles = (int)config.getDouble("spout-count", spoutparticles);
+		strandparticles = (int)config.getDouble("strand-count", strandparticles);
+		
+		//For ShieldEfefct
+		sphere = config.getBoolean("sphere", true);
+		
+	}
+	
+	@Override
+	public void playEffectLocation(Location location) {
+		EffectLib lib = EffectLib.instance();
+		EffectManager em = new EffectManager(lib);
+		if(effectClass.equals("WarpEffect")){
+			WarpEffect effect = new WarpEffect(em);
+			em.setParticleRange(visibleRange);
+			location.add(0, yOffset, 0);
+				effect.particle = de.slikey.effectlib.util.ParticleEffect.fromName(particle);
+				effect.setLocation(location);
+				effect.iterations = iterations;
+				effect.particles = count;
+		        effect.radius = radius;
+				effect.rings = rings;
+				effect.grow = warpgrow;
+				effect.color = Color.fromBGR(blue, green, red); 
+				effect.start();
+		}else if(effectClass.equals("DragonEffect")){
+			DragonEffect effect = new DragonEffect(em);
+			em.setParticleRange(visibleRange);
+			location.add(0, yOffset, 0);
+				effect.particle = de.slikey.effectlib.util.ParticleEffect.fromName(particle);
+				effect.setLocation(location);
+				effect.iterations = iterations;
+				effect.particles = count;
+				effect.pitch = pitch;
+				effect.arcs = arcs; 
+				effect.stepsPerIteration = stepsPerIteration;
+				effect.length = length;
+				effect.speed = 1;
+				effect.color = Color.fromBGR(blue, green, red);
+				effect.start();
+		}else if(effectClass.equals("ConeEffect")){
+			ConeEffect effect = new ConeEffect(em);
+			em.setParticleRange(visibleRange);
+			location.add(0, yOffset, 0);
+				effect.particle = de.slikey.effectlib.util.ParticleEffect.fromName(particle);
+				effect.setLocation(location);
+				effect.iterations = iterations;
+				effect.particles = count;
+				effect.lengthGrow = conegrow;
+				effect.radiusGrow = rgrow;
+				effect.speed = 1;
+				effect.color = Color.fromBGR(blue, green, red);
+				effect.start();
+		}else if(effectClass.equals("HelixEffect")){
+			HelixEffect effect = new HelixEffect(em);
+			em.setParticleRange(visibleRange);
+			location.add(0, yOffset, 0);
+				effect.particle = de.slikey.effectlib.util.ParticleEffect.fromName(particle);
+				effect.setLocation(location);
+				effect.iterations = iterations;
+				effect.particles = count;
+				effect.strands = strands;
+				effect.curve = curve;
+				effect.radius = radius;
+				effect.speed = 1;
+				effect.color = Color.fromBGR(blue, green, red);
+				effect.start();
+		}else if(effectClass.equals("DiscoBallEffect")){
+			DiscoBallEffect effect = new DiscoBallEffect(em);
+			em.setParticleRange(visibleRange);
+			location.add(0, yOffset, 0);
+				effect.sphereParticle = de.slikey.effectlib.util.ParticleEffect.fromName(particle);
+				effect.lineParticle = de.slikey.effectlib.util.ParticleEffect.fromName(lineparticle);
+				effect.setLocation(location);
+				effect.iterations = iterations;
+				effect.lineColor = Color.fromBGR(lineblue, linegreen, linered);
+				effect.sphereColor = Color.fromBGR(sphereblue, spheregreen, spherered);
+				effect.sphereRadius = radius;
+				effect.lineParticles = count2;
+				effect.sphereParticles = count;
+				effect.start();
+		}else if(effectClass.equals("TextEffect")){
+			TextEffect effect = new TextEffect(em);
+			em.setParticleRange(visibleRange);
+			location.add(0, yOffset, 0);
+				effect.particle = de.slikey.effectlib.util.ParticleEffect.fromName(particle);
+				effect.setLocation(location);
+				effect.text = text;
+				effect.iterations = iterations;
+				effect.color = Color.fromBGR(blue, green, red);
+				effect.start();
+		}else if(effectClass.equals("FountainEffect")){
+			FountainEffect effect = new FountainEffect(em);
+			em.setParticleRange(visibleRange);
+			location.add(0, yOffset, 0);
+				effect.particle = de.slikey.effectlib.util.ParticleEffect.fromName(particle);
+				effect.setLocation(location);
+                effect.heightSpout = spoutheight;
+                effect.particlesStrand = strandparticles;
+                effect.particlesSpout = spoutparticles;
+				effect.iterations = iterations;
+				effect.radius = fountainradius;
+				effect.strands = strands;
+				effect.height = height;
+				effect.color = Color.fromBGR(blue, green, red);
+				effect.start();
+		}else if(effectClass.equals("ShieldEffect")){
+			ShieldEffect effect = new ShieldEffect(em);
+			em.setParticleRange(visibleRange);
+			location.add(0, yOffset, 0);
+				effect.particle = de.slikey.effectlib.util.ParticleEffect.fromName(particle);
+				effect.particles = count;
+				effect.setLocation(location);
+				effect.sphere = sphere;
+				effect.iterations = iterations;
+				effect.radius = (int) radius;
+				effect.color = Color.fromBGR(blue, green, red);
+				effect.start();
+		}else if(effectClass.equals("SphereEffect")){
+			SphereEffect effect = new SphereEffect(em);
+			em.setParticleRange(visibleRange);
+			location.add(0, yOffset, 0);
+				effect.particle = de.slikey.effectlib.util.ParticleEffect.fromName(particle);
+				effect.particles = count;
+				effect.setLocation(location);
+				effect.iterations = iterations;
+				effect.color = Color.fromBGR(blue, green, red);
+				effect.radius = (int) radius;
+				effect.start();
+		}
+	}
+		
+}
