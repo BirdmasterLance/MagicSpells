@@ -254,7 +254,9 @@ public abstract class SpellEffect {
 		effects.put("bluesparkle", BlueSparkleEffect.class);
 		effects.put("broadcast", BroadcastEffect.class);
 		effects.put("cloud", CloudEffect.class);
+		effects.put("colordust", Colordust.class);
 		effects.put("dragondeath", DragonDeathEffect.class);
+		effects.put("effectlib", EffectLibEffects.class);
 		effects.put("ender", EnderSignalEffect.class);
 		effects.put("explosion", ExplosionEffect.class);
 		effects.put("fireworks", FireworksEffect.class);
