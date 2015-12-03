@@ -35,7 +35,7 @@ public class DrainlifeSpell extends TargetedSpell implements TargetedEntitySpell
 	private boolean instant;
 	private boolean ignoreArmor;
 	private boolean checkPlugins;
-	private boolean particles;
+	private String particles;
 	
 	public DrainlifeSpell(MagicConfig config, String spellName) {
 		super(config, spellName);
