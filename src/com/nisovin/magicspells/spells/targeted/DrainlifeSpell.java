@@ -35,6 +35,7 @@ public class DrainlifeSpell extends TargetedSpell implements TargetedEntitySpell
 	private boolean instant;
 	private boolean ignoreArmor;
 	private boolean checkPlugins;
+	private String particles;
 	
 	public DrainlifeSpell(MagicConfig config, String spellName) {
 		super(config, spellName);
@@ -49,6 +50,7 @@ public class DrainlifeSpell extends TargetedSpell implements TargetedEntitySpell
 		instant = getConfigBoolean("instant", true);
 		ignoreArmor = getConfigBoolean("ignore-armor", false);
 		checkPlugins = getConfigBoolean("check-plugins", true);
+		particles = getConfigString("particle", "smoke")
 	}
 	
 	@Override
@@ -202,7 +204,7 @@ public class DrainlifeSpell extends TargetedSpell implements TargetedEntitySpell
 			Vector tempVector = current.clone();
 			tempVector.subtract(caster.getLocation().toVector()).normalize();
 			current.subtract(tempVector);
-			world.playEffect(current.toLocation(world), Effect.SMOKE, 4);
+			MagicSpells.getVolatileCodeHandler().playParticleEffect(current.toLocation(world), particle, 0, (float) 0.1, 0, 5, 256, (float) 0.5);
 			if (current.distanceSquared(targetVector) < 4 || tick > range * 1.5) {
 				stop();
 				if (!instant) {
