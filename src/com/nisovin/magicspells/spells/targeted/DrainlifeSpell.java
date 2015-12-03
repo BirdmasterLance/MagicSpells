@@ -35,6 +35,7 @@ public class DrainlifeSpell extends TargetedSpell implements TargetedEntitySpell
 	private boolean instant;
 	private boolean ignoreArmor;
 	private boolean checkPlugins;
+	private String particle;
 	
 	public DrainlifeSpell(MagicConfig config, String spellName) {
 		super(config, spellName);
@@ -49,6 +50,7 @@ public class DrainlifeSpell extends TargetedSpell implements TargetedEntitySpell
 		instant = getConfigBoolean("instant", true);
 		ignoreArmor = getConfigBoolean("ignore-armor", false);
 		checkPlugins = getConfigBoolean("check-plugins", true);
+		particle = getConfigString("particle", "smoke")
 	}
 	
 	@Override
