@@ -339,6 +339,10 @@ public class Util {
 				item = MagicSpells.getVolatileCodeHandler().addFakeEnchantment(item);
 			}
 			
+			if (config.getBoolean("fakeenchant", false)) {
+				item = MagicSpells.getVolatileCodeHandler().addFakeEnchantment(item);
+			}
+			
 			// attributes
 			if (config.contains("attributes")) {
 				Set<String> attrs = config.getConfigurationSection("attributes").getKeys(false);
