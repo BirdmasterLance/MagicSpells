@@ -40,7 +40,7 @@ public class MountSpell extends TargetedSpell implements TargetedEntitySpell {
 				} else {
 					// join stack
 					LivingEntity target = null;
-					TargetInfo<Player> targetInfo = getTargetedPlayer(player, power);
+					TargetInfo<LivingEntity> targetInfo = getTargetedEntity(player, power);
 					if (targetInfo != null) {
 						target = targetInfo.getTarget();
 					}
@@ -59,7 +59,7 @@ public class MountSpell extends TargetedSpell implements TargetedEntitySpell {
 			} else {
 				// reverse - casting player forces target to mount self
 				LivingEntity target = null;
-				TargetInfo<Player> targetInfo = getTargetedPlayer(player, power);
+				TargetInfo<LivingEntity> targetInfo = getTargetedEntity(player, power);
 				if (targetInfo != null) {
 					target = targetInfo.getTarget();
 				}
