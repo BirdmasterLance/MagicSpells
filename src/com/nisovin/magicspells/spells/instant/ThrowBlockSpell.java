@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
@@ -206,13 +207,13 @@ public class ThrowBlockSpell extends InstantSpell implements TargetedLocationSpe
 		public ThrowBlockMonitor(FallingBlock block, FallingBlockInfo info) {
 			this.block = block;
 			this.info = info;
-			this.task = MagicSpells.scheduleRepeatingTask(this, 20, 1);
+			this.task = MagicSpells.scheduleRepeatingTask(this, 1, 1);
 		}
 		
 		@Override
 		public void run() {
 			if (stickyBlocks && !block.isDead()) {
-				if (block.getVelocity().lengthSquared() < .01) {
+				if (block.getVelocity().getX() == 0 || block.getVelocity().getY() == 0 || block.getVelocity().getZ() == 0) {
 					if (!preventBlocks) {
 						Block b = block.getLocation().getBlock();
 						if (b.getType() == Material.AIR) {
