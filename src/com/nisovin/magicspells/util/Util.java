@@ -329,6 +329,11 @@ public class Util {
 			// set meta
 			item.setItemMeta(meta);
 			
+			// hide tooltip
+			if (config.getBoolean("hide-tooltip", false)) {
+				item = MagicSpells.getVolatileCodeHandler().hideTooltipCrap(item);
+			}
+			
 			// unbreakable
 			if (config.getBoolean("unbreakable", false)) {
 				item = MagicSpells.getVolatileCodeHandler().setUnbreakable(item);
@@ -672,7 +677,7 @@ public class Util {
 	
 	public static boolean removeFromInventory(Inventory inventory, ItemStack item) {
 		int amt = item.getAmount();
-		ItemStack[] items = inventory.getContents();
+		ItemStack[] items = Arrays.copyOf(inventory.getContents(), 36);
 		for (int i = 0; i < items.length; i++) {
 			if (items[i] != null && item.isSimilar(items[i])) {
 				if (items[i].getAmount() > amt) {
@@ -699,7 +704,7 @@ public class Util {
 	
 	public static boolean addToInventory(Inventory inventory, ItemStack item, boolean stackExisting, boolean ignoreMaxStack) {
 		int amt = item.getAmount();
-		ItemStack[] items = inventory.getContents();
+		ItemStack[] items = Arrays.copyOf(inventory.getContents(), 36);
 		if (stackExisting) {
 			for (int i = 0; i < items.length; i++) {
 				if (items[i] != null && item.isSimilar(items[i])) {
